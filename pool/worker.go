@@ -2,32 +2,33 @@ package pool
 
 import (
 	"log"
-	"tutorials/concurrent-limiter/work"
+
+	"github.com/Lebonesco/go_worker_pool/work"
 )
 
 type Work struct {
-	ID	int
+	ID  int
 	Job string
 }
 
 type Worker struct {
-	ID int
+	ID            int
 	WorkerChannel chan chan Work
-	Channel chan Work
-	End chan bool
+	Channel       chan Work
+	End           chan bool
 }
 
 // start worker
 func (w *Worker) Start() {
 	go func() {
 		for {
-			w.WorkerChannel <-w.Channel
+			w.WorkerChannel <- w.Channel
 			select {
 			case job := <-w.Channel:
 				// do work
 				work.DoWork(job.Job, w.ID)
 			case <-w.End:
-				return 
+				return
 			}
 		}
 	}()

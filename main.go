@@ -1,10 +1,10 @@
-package main 
+package main
 
 import (
 	"log"
 	//"./limiter"
-	"tutorials/concurrent-limiter/pool"
-	"tutorials/concurrent-limiter/work"
+	"github.com/Lebonesco/go_worker_pool/pool"
+	"github.com/Lebonesco/go_worker_pool/work"
 )
 
 const WORKER_COUNT = 5
@@ -15,6 +15,6 @@ func main() {
 	collector := pool.StartDispatcher(WORKER_COUNT) // start up worker pool
 
 	for i, job := range work.CreateJobs(JOB_COUNT) {
-		collector.Work <-pool.Work{Job: job, ID: i}
+		collector.Work <- pool.Work{Job: job, ID: i}
 	}
-}	
+}
